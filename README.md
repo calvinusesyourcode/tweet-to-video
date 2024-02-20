@@ -10,3 +10,6 @@ npm install puppeteer
 npm install fluent-ffmpeg
 ```
 5. Enjoy!
+```
+node main.js <tweet_url1> <tweet_url2> ...
+```
