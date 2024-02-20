@@ -93,7 +93,7 @@ async function printTweets(tweets) {
                                 <p class="font-light text-gray-300">@${tweet.username}</p>    
                             </div>
                         </div>
-                        <p class="font-normal">${tweet.text}</p>
+                        <p class="font-normal h-fit leading-loose">${tweet.text}</p>
                     </main>
                 </body>
             </html>
