@@ -1,3 +1,5 @@
+![output example](https://github.com/calvinusesyourcode/tweet-to-video/blob/main/example.png?raw=true)
+
 1. Get access to Twitter API via [apify/quacker/twitter-url-scraper](https://console.apify.com/actors/KVJr35xjTw2XyvMeK/console) (2000 tweets per month free)
 2. Clone repo
 ```
@@ -13,3 +15,5 @@ npm install fluent-ffmpeg
 ```
 node main.js <tweet_url1> <tweet_url2> ...
 ```
+
+Note: Text only for now.
