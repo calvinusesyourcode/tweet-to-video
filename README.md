@@ -1,4 +1,4 @@
-1. Get access to Twitter API via (quacker/twitter-url-scraper on Apify)[https://console.apify.com/actors/KVJr35xjTw2XyvMeK/console] (2000 tweets per month free)
+1. Get access to Twitter API via [quacker/twitter-url-scraper on Apify](https://console.apify.com/actors/KVJr35xjTw2XyvMeK/console) (2000 tweets per month free)
 2. Clone repo
 ```
 git clone https://github.com/calvinusesyourcode/tweet-to-video
