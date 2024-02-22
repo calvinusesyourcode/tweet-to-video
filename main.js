@@ -4,6 +4,9 @@ const ffmpeg = require('fluent-ffmpeg');
 const fs = require('fs').promises;
 require('dotenv').config();
 
+const makeVideo = true
+const deleteImage = true
+
 async function getTweets(tweetUrls) {
 
     let response = await fetch(`https://api.apify.com/v2/acts/quacker~twitter-url-scraper/runs?token=${process.env.APIFY_TOKEN}`, {
@@ -58,11 +61,13 @@ async function getTweets(tweetUrls) {
 }
 
 async function printTweets(tweets) {
+    console.log("Printing tweets...");
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     await page.setViewport({ width: 1080, height: 1920 });
 
     for (let tweet of tweets) {
+        console.log(`Rendering ${tweet.id} from ${tweet.username}`);
         await page.setContent(`
             <html>
                 <head>
@@ -75,10 +80,10 @@ async function printTweets(tweets) {
                         }
                     </style>
                 </head>
-                <body class="bg-black flex justify-center items-center text-white text-6xl p-16">
+                <body class="bg-black flex justify-center items-center text-white text-6xl p-16 subpixel-antialiased leading-tight">
                     <main class="flex flex-col gap-6 w-full h-fit">
-                        <div class="flex justify-start gap-6">
-                            <img src="${tweet.pfp}" alt="Profile Picture" width="50" height="50" class="rounded-full flex-shrink-0 aspect-square w-32 h-32">
+                        <div class="flex justify-start gap-6 items-end">
+                            <img src="${tweet.pfp}" alt="Profile Picture" width="64" height="64" class="rounded-full flex-shrink-0 aspect-square w-36 h-36">
                             <div class="flex flex-col justify-center items-start">
                                 <div class="flex gap-4 items-baseline">
                                     <p class="font-semibold">${tweet.name}</p>
@@ -93,15 +98,15 @@ async function printTweets(tweets) {
                                 <p class="font-light text-gray-300">@${tweet.username}</p>    
                             </div>
                         </div>
-                        <p class="font-normal h-fit leading-loose">${tweet.text}</p>
+                        <p class="font-normal h-fit mt-2">${tweet.text}</p>
                     </main>
                 </body>
             </html>
         `);
-        screenshotPath = `tweet___${tweet.username}-${Date.now().toString().slice(8)}.png`;
+        screenshotPath = `tweet___${tweet.username}-${tweet.id}.png`;
         await page.screenshot({ path: screenshotPath });
         const videoPath = screenshotPath.replace('.png', '.mp4');
-        await new Promise((resolve, reject) => {
+        makeVideo && await new Promise((resolve, reject) => {
             ffmpeg(screenshotPath)
                 .loop(5) // Duration of 5 seconds
                 .fps(25) // Frame rate
@@ -116,7 +121,7 @@ async function printTweets(tweets) {
                 .on('end', async function() {
                     console.log('> video created:', videoPath);
                     try {
-                        await fs.unlink(screenshotPath);
+                        deleteImage && await fs.unlink(screenshotPath);
                     } catch (err) {
                         console.error('Error deleting original image:', err);
                     }
